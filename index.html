@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fluidseal AB — Customer Interest Survey</title>
+<style>
+  :root{
+    --yellow:#FFD200;
+    --yellow-soft:#FDF3C7;
+    --yellow-row:#FBEBA6;
+    --black:#1a1a1a;
+    --grey:#555;
+    --line:#e2e2e2;
+    --green:#1f8f4e;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--black);
+    background:#f4f4f4;
+    line-height:1.45;
+  }
+  .wrap{max-width:920px;margin:0 auto;background:#fff;box-shadow:0 1px 6px rgba(0,0,0,.08);}
+  /* Header */
+  .topbar{background:var(--yellow);height:14px;}
+  header{
+    background:var(--black);color:#fff;padding:18px 26px;
+    display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;
+  }
+  header .tag{color:var(--yellow);font-weight:800;font-style:italic;font-size:15px;}
+  .brand{display:flex;align-items:center;gap:12px;}
+  .brand .dot{width:34px;height:34px;border-radius:50%;background:var(--yellow);display:inline-block;flex:none;}
+  .brand .name{font-size:30px;font-weight:800;letter-spacing:-1px;}
+  .brand .name span{color:var(--yellow);}
+  .brand .sub{font-size:11px;font-weight:700;background:var(--yellow);color:var(--black);padding:1px 5px;border-radius:2px;margin-left:2px;vertical-align:middle;}
+  .intro{padding:20px 26px 4px;}
+  .intro h1{margin:0 0 4px;font-size:24px;text-transform:uppercase;letter-spacing:.5px;}
+  .intro p{margin:2px 0;color:var(--grey);font-size:13px;}
+  form{padding:8px 26px 40px;}
+  /* Section headers */
+  .section{margin-top:26px;}
+  .section > .bar{
+    background:var(--yellow);color:var(--black);font-weight:800;
+    text-transform:uppercase;letter-spacing:.5px;font-size:14px;
+    padding:8px 12px;border-radius:3px;
+  }
+  .section .hint{font-size:12px;color:var(--grey);margin:6px 2px 10px;}
+  /* Field grid */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px;margin-top:14px;}
+  .grid.one{grid-template-columns:1fr;}
+  .field{display:flex;flex-direction:column;gap:4px;}
+  .field label{font-size:12.5px;font-weight:600;color:#333;}
+  .field .req{color:#c0392b;}
+  input[type=text],input[type=email],input[type=tel],input[type=date],input[type=number],textarea,select{
+    border:1px solid #cfcfcf;border-radius:6px;padding:9px 10px;font-size:14px;font-family:inherit;background:#fff;
+    width:100%;
+  }
+  input:focus,textarea:focus,select:focus{outline:none;border-color:var(--yellow);box-shadow:0 0 0 3px var(--yellow-soft);}
+  textarea{resize:vertical;min-height:70px;}
+  .pill-group{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px;}
+  .pill{position:relative;}
+  .pill input{position:absolute;opacity:0;pointer-events:none;}
+  .pill span{display:inline-block;border:1px solid #cfcfcf;border-radius:20px;padding:6px 14px;font-size:13px;cursor:pointer;user-select:none;background:#fff;}
+  .pill input:checked + span{background:var(--black);color:#fff;border-color:var(--black);}
+  /* Checklist tables */
+  .checklist{margin-top:12px;border:1px solid var(--line);border-radius:8px;overflow:hidden;}
+  .checklist .head,.checklist .row{
+    display:grid;align-items:center;gap:8px;padding:8px 12px;
+  }
+  .checklist.dual .head,.checklist.dual .row{grid-template-columns:1fr 150px 150px;}
+  .checklist.single .head,.checklist.single .row{grid-template-columns:1fr 120px;}
+  .checklist.catalogue .head,.checklist.catalogue .row{grid-template-columns:1fr 120px 120px;}
+  .checklist.promo .head,.checklist.promo .row{grid-template-columns:1fr 90px 110px;}
+  .checklist .head{background:#fafafa;font-weight:700;font-size:11.5px;text-transform:uppercase;letter-spacing:.4px;color:#666;}
+  .checklist .row{font-size:13.5px;border-top:1px solid var(--line);}
+  .checklist .row:nth-child(even){background:var(--yellow-soft);}
+  .checklist .row .item{font-weight:500;}
+  .checklist .cell{display:flex;gap:12px;justify-content:flex-start;}
+  .checklist .cell.center{justify-content:center;}
+  .mini{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;color:#444;cursor:pointer;}
+  .mini input{width:16px;height:16px;accent-color:var(--black);cursor:pointer;}
+  .colhint{font-size:11px;color:#888;font-weight:500;text-transform:none;letter-spacing:0;}
+  .qtybox{width:70px;padding:5px 8px;}
+  /* Subgroup label inside a checklist */
+  .subgroup{grid-column:1/-1;background:#f0f0f0;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.4px;color:#444;padding:7px 12px;border-top:1px solid var(--line);}
+  /* Submit */
+  .actions{margin-top:34px;display:flex;flex-direction:column;gap:10px;align-items:flex-start;}
+  button.submit{
+    background:var(--black);color:var(--yellow);border:none;border-radius:8px;
+    padding:14px 30px;font-size:16px;font-weight:800;cursor:pointer;letter-spacing:.3px;
+  }
+  button.submit:hover{background:#000;}
+  button.submit:disabled{opacity:.6;cursor:not-allowed;}
+  .status{font-size:13.5px;}
+  .status.ok{color:var(--green);font-weight:600;}
+  .status.err{color:#c0392b;font-weight:600;}
+  footer{background:var(--black);color:#cfcfcf;font-size:12px;padding:22px 26px;display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+  footer h4{color:var(--yellow);margin:0 0 4px;font-size:13px;letter-spacing:.5px;}
+  footer a{color:var(--yellow);text-decoration:none;}
+  .footbar{background:var(--yellow);height:10px;}
+  @media(max-width:640px){
+    .grid{grid-template-columns:1fr;}
+    .checklist.dual .head,.checklist.dual .row{grid-template-columns:1fr 1fr;}
+    .checklist.dual .head span:first-child{grid-column:1/-1;}
+    footer{grid-template-columns:1fr;}
+    header .tag{display:none;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar"></div>
+  <header>
+    <div class="brand">
+      <span class="dot"></span>
+      <span class="name"><span>fluid</span>seal <span class="sub">AB Inc.</span></span>
+    </div>
+    <div class="tag">need a seal… we have the solution</div>
+  </header>
+
+  <div class="intro">
+    <h1>Customer Interest Survey</h1>
+    <p>Tell us how you'd like to work with Fluidseal. This helps us set up your account, contacts, and the products and materials you care about.</p>
+    <p style="font-size:12px;">Your responses are sent to our team and saved to our system. Fields marked <span style="color:#c0392b">*</span> are required.</p>
+  </div>
+
+  <form id="survey">
+
+    <!-- HEADER -->
+    <div class="section">
+      <div class="bar">Account &amp; Submission</div>
+      <div class="grid">
+        <div class="field"><label>Date</label><input type="date" name="survey_date" /></div>
+        <div class="field"><label>Filled Out By <span class="req">*</span></label><input type="text" name="filled_out_by" required /></div>
+        <div class="field"><label>Account Name <span class="req">*</span></label><input type="text" name="account_name" required /></div>
+        <div class="field"><label>City</label><input type="text" name="account_city" /></div>
+        <div class="field"><label>Industry Group</label><input type="text" name="industry_group" /></div>
+        <div class="field"><label>Industry</label><input type="text" name="industry" /></div>
+      </div>
+    </div>
+
+    <!-- SALES CONTACT -->
+    <div class="section">
+      <div class="bar">Sales Contact</div>
+      <div class="grid">
+        <div class="field"><label>First Name</label><input type="text" name="sales_first_name" /></div>
+        <div class="field"><label>Last Name</label><input type="text" name="sales_last_name" /></div>
+        <div class="field"><label>Job Title</label><input type="text" name="sales_job_title" /></div>
+        <div class="field"><label>Email</label><input type="email" name="sales_email" /></div>
+        <div class="field"><label>Phone #</label><input type="tel" name="sales_phone" /></div>
+        <div class="field">
+          <label>Preferred Method of Contact</label>
+          <div class="pill-group" data-name="sales_preferred_contact">
+            <label class="pill"><input type="radio" name="sales_preferred_contact" value="Office Phone"><span>Office Phone</span></label>
+            <label class="pill"><input type="radio" name="sales_preferred_contact" value="Mobile Phone"><span>Mobile Phone</span></label>
+            <label class="pill"><input type="radio" name="sales_preferred_contact" value="Email"><span>Email</span></label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADMIN CONTACT -->
+    <div class="section">
+      <div class="bar">Administration / Accounts Payable Contact</div>
+      <div class="grid">
+        <div class="field"><label>First Name</label><input type="text" name="admin_first_name" /></div>
+        <div class="field"><label>Last Name</label><input type="text" name="admin_last_name" /></div>
+        <div class="field"><label>Email</label><input type="email" name="admin_email" /></div>
+        <div class="field">
+          <label>Invoices Sent Via</label>
+          <select name="admin_invoices_via">
+            <option value="">— Select —</option>
+            <option>Email</option>
+            <option>Mail</option>
+          </select>
+        </div>
+        <div class="field"><label>Phone #</label><input type="tel" name="admin_phone" /></div>
+        <div class="field">
+          <label>Preferred Method of Contact</label>
+          <div class="pill-group" data-name="admin_preferred_contact">
+            <label class="pill"><input type="radio" name="admin_preferred_contact" value="Office Phone"><span>Office Phone</span></label>
+            <label class="pill"><input type="radio" name="admin_preferred_contact" value="Mobile Phone"><span>Mobile Phone</span></label>
+            <label class="pill"><input type="radio" name="admin_preferred_contact" value="Email"><span>Email</span></label>
+          </div>
+        </div>
+        <div class="field one" style="grid-column:1/-1">
+          <label>Payment Option(s)</label>
+          <div class="pill-group">
+            <label class="pill"><input type="checkbox" name="payment" value="Cash"><span>Cash</span></label>
+            <label class="pill"><input type="checkbox" name="payment" value="Credit"><span>Credit</span></label>
+            <label class="pill"><input type="checkbox" name="payment" value="Debit"><span>Debit</span></label>
+            <label class="pill"><input type="checkbox" name="payment" value="Cheque"><span>Cheque</span></label>
+            <label class="pill"><input type="checkbox" name="payment" value="Direct Deposit"><span>Direct Deposit</span></label>
+            <label class="pill"><input type="checkbox" name="payment" value="E-Transfer"><span>E-Transfer</span></label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SERVICES -->
+    <div class="section">
+      <div class="bar">Services of Interest</div>
+      <div class="hint">For each service, mark whether you'd <strong>require</strong> it and whether you're <strong>currently using</strong> it (with any supplier).</div>
+      <div id="services" class="checklist dual"></div>
+      <div class="field" style="margin-top:12px"><label>Comments — Services</label><textarea name="comments_services"></textarea></div>
+    </div>
+
+    <!-- PACKAGING -->
+    <div class="section">
+      <div class="bar">Packaging of Interest</div>
+      <div id="packaging" class="checklist dual"></div>
+      <div class="field" style="margin-top:12px"><label>Comments — Packaging</label><textarea name="comments_packaging"></textarea></div>
+    </div>
+
+    <!-- SUBSCRIPTIONS: CATALOGUES -->
+    <div class="section">
+      <div class="bar">Subscriptions — Catalogues</div>
+      <div class="hint">Choose how you'd like to receive each catalogue.</div>
+      <div id="catalogues" class="checklist catalogue"></div>
+    </div>
+
+    <!-- SUBSCRIPTIONS: BROCHURES -->
+    <div class="section">
+      <div class="bar">Subscriptions — Brochures</div>
+      <div id="brochures" class="checklist single"></div>
+    </div>
+
+    <!-- SUBSCRIPTIONS: FLYERS -->
+    <div class="section">
+      <div class="bar">Subscriptions — Flyers</div>
+      <div id="flyers" class="checklist single"></div>
+    </div>
+
+    <!-- SUBSCRIPTIONS: CHARTS -->
+    <div class="section">
+      <div class="bar">Subscriptions — Charts</div>
+      <div id="charts" class="checklist single"></div>
+    </div>
+
+    <!-- SUBSCRIPTIONS: POSTERS -->
+    <div class="section">
+      <div class="bar">Subscriptions — Posters</div>
+      <div id="posters" class="checklist single"></div>
+    </div>
+
+    <!-- PROMOTIONAL -->
+    <div class="section">
+      <div class="bar">Promotional Items</div>
+      <div id="promo" class="checklist promo"></div>
+      <div class="field" style="margin-top:12px"><label>Comments — Promotional Items</label><textarea name="comments_promo"></textarea></div>
+    </div>
+
+    <!-- GENERAL COMMENTS -->
+    <div class="section">
+      <div class="bar">Anything Else?</div>
+      <div class="field" style="margin-top:12px"><label>General comments / special requests</label><textarea name="comments_general"></textarea></div>
+    </div>
+
+    <div class="actions">
+      <button type="submit" class="submit" id="submitBtn">Submit Survey</button>
+      <div class="status" id="status"></div>
+    </div>
+  </form>
+
+  <footer>
+    <div>
+      <h4>FLUIDSEAL AB INC</h4>
+      17309 - 107th Ave<br>Edmonton, AB T5S 1E5<br>
+      T: 780.414.1871 · F: 780.487.5419<br>
+      E: <a href="mailto:fluidsealab@sealsonline.com">fluidsealab@sealsonline.com</a>
+    </div>
+    <div>
+      <h4>FLUIDSEAL CG INC</h4>
+      Bay #6, 3815 - 61st Ave SE<br>Calgary, AB T2C 1V5<br>
+      T: 403.279.1871 · F: 403.279.1821<br>
+      E: <a href="mailto:fluidsealcg@sealsonline.com">fluidsealcg@sealsonline.com</a>
+    </div>
+  </footer>
+  <div class="footbar"></div>
+</div>
+
+<script>
+/* ---------- Config ---------- */
+const SUPABASE_URL = "https://hnmbjqhxvxakhdzgetxw.supabase.co";
+const SUPABASE_KEY = "sb_publishable_HbRa8tV_Vmj5WPdvDc37uw_Vp7WajUe";
+const TABLE = "customer_interest_survey";
+const NOTIFY_EMAIL = "absurvey@sealsonline.com";
+
+/* ---------- Data ---------- */
+const SERVICES = [
+  "Vendor Managed Inventory","Inventory and Warehouse Setup","PPD and Charge Courier",
+  "Technical & Engineering Consulting","Quality Vendor Connection","Seal Training",
+  "Customer Online Self-Serve","RFID Product Tracking","Customized Kit Packaging",
+  "OEM Proprietary Protection","Monthly Sales Flyer","Subscription Services",
+  "Facility Tours","Industry Solutions","Seal Kit Custom Part # Creation"
+];
+const PACKAGING = [
+  "Fluidseal Bags Sealed (Default)","Black Bags (Extra $)","Black Bags - Ziploc (Extra $)",
+  "Clear Bags Sealed","Packaged Quantities (Quote $)","Customer Labeling","White Boxes with Labeling"
+];
+const CATALOGUES = ["Parts","Seal Kits","Shaft Seals","Accessories","Vendor/Brand Specific"];
+const BROCHURES = [
+  "Adhesives & Sealants","Bearings","Bonded Seals","Braided Packing","Camlock Gaskets","Caps & Plugs",
+  "Cement Plugs and Liner Wipers","Company Introduction","Custom Machined / Molded Parts","Drilling & Well Servicing",
+  "Dyna-Max","Employee Handbook","Prototype / Custom Shape / MRO","Frac Balls","Gaskets","Lock Nuts",
+  "Mechanical Seals","O-Ring Kits","Manway Gaskets","Metal Seals","MWD","Packer Elements","Park Slick Coating",
+  "PerfluoroElastomer O-Rings","Polyurethane Material","Protech Bearings","Pump & Motor","Rotary Seals",
+  "Split Flange Seals","S-Seals","T-Seals","Well Service Packing","Winch Kits","Wireline Packing",
+  "Retaining Rings","Unified / Disposable Pistons","Tool Joint Protectors","Weco Wing Union",
+  "Technical Literature","Material Reference Guide"
+];
+const FLYERS = [
+  "Catalogue Feature Sheet","Adhesives - Hernon","Bearings - DU","Bearings - Spherical","Braided Packing",
+  "Caps and Plugs","Chemical Pump Packing","Custom Machining","Drilling Products","ED Seals","Frac Balls",
+  "Gaskets - SAE Flange","Hardened Steel Bushings","Manway Rail Gaskets","Mechanical Seals",
+  "New Polyurethane Generation","Oil and Gas Drilling and Well Servicing","O-Rings","Perfluoroelastomer",
+  "Product List","Pump and Motors","Rota Seal","Heavy Equipment","Sanitary Gaskets","Seal Kits - Mobile",
+  "Seal Kits - Heavy Equipment","Seal Kits - Stage Cylinder","Simriz Cross Reference","Stuffing Box Packing",
+  "Teflon Encapsulated O-Rings","Teflon Shaft Seals","Winch Kits"
+];
+const CHARTS = [
+  "Material Reference Chart","Conversion Chart","FFKM Crossover Guide","Hydraulic Cylinders Measurement Tool",
+  "Industries Measurement Tool","Manufactures Materials","O-Ring Chart","Measurement Grid","Nitrile O-Ring Chart",
+  "Pressure Rating Reference Chart","O-Ring Tolerance","Polyurethane"
+];
+const POSTERS = [
+  "Literature","OEM Caterpillar","Oilfield BOP","Oilfield Coil Tubing","Oilfield Drilling & Well Servicing",
+  "Oilfield Frac Services","Oilfield MWD","Oilfield Nitrogen Equipment","Oilfield Perforating","Oilfield Valves",
+  "Oilfield Well Completions","Oilfield Wireline","O-Ring Kits","Parts","Rig Equipment","Seal Kits"
+];
+const PROMO = [
+  "Calendar","Coolers","Golf Balls","Golf Shirt","Golf Towels","Hand Sanitizer","Hats","Hockey Tickets",
+  "Lawn Chairs","Mock Neck","Mugs","O-Ring Charts","Screen Wipes","Tapem-Calc","USB",
+  "Xmas Card","Xmas Gift","Toque","Xmas Party Gift"
+];
+
+/* ---------- Renderers ---------- */
+function slug(s){return s.toLowerCase().replace(/[^a-z0-9]+/g,"_").replace(/^_|_$/g,"");}
+
+function renderDual(containerId, items){
+  const el = document.getElementById(containerId);
+  let html = '<div class="head"><span>Item</span><span class="colhint">Required</span><span class="colhint">Currently Using</span></div>';
+  items.forEach(name=>{
+    const id = slug(name);
+    html += `<div class="row" data-item="${name}">
+      <span class="item">${name}</span>
+      <span class="cell">
+        <label class="mini"><input type="checkbox" data-group="${containerId}" data-field="required" data-item="${name}"> Required</label>
+      </span>
+      <span class="cell">
+        <label class="mini"><input type="checkbox" data-group="${containerId}" data-field="using" data-item="${name}"> Using</label>
+      </span>
+    </div>`;
+  });
+  el.innerHTML = html;
+}
+
+function renderSingle(containerId, items){
+  const el = document.getElementById(containerId);
+  let html = '<div class="head"><span>Item</span><span class="colhint">Interested</span></div>';
+  items.forEach(name=>{
+    html += `<div class="row" data-item="${name}">
+      <span class="item">${name}</span>
+      <span class="cell center">
+        <label class="mini"><input type="checkbox" data-group="${containerId}" data-item="${name}"> Yes</label>
+      </span>
+    </div>`;
+  });
+  el.innerHTML = html;
+}
+
+function renderCatalogues(containerId, items){
+  const el = document.getElementById(containerId);
+  let html = '<div class="head"><span>Catalogue</span><span class="colhint">Electronic</span><span class="colhint">Paper Copy</span></div>';
+  items.forEach(name=>{
+    html += `<div class="row" data-item="${name}">
+      <span class="item">${name}</span>
+      <span class="cell center"><label class="mini"><input type="checkbox" data-group="${containerId}" data-field="electronic" data-item="${name}"> Electronic</label></span>
+      <span class="cell center"><label class="mini"><input type="checkbox" data-group="${containerId}" data-field="paper" data-item="${name}"> Paper</label></span>
+    </div>`;
+  });
+  el.innerHTML = html;
+}
+
+function renderPromo(containerId, items){
+  const el = document.getElementById(containerId);
+  let html = '<div class="head"><span>Item</span><span class="colhint">Interested</span><span class="colhint">Qty</span></div>';
+  items.forEach(name=>{
+    html += `<div class="row" data-item="${name}">
+      <span class="item">${name}</span>
+      <span class="cell center"><label class="mini"><input type="checkbox" data-group="${containerId}" data-item="${name}"> Yes</label></span>
+      <span class="cell center"><input type="number" min="0" class="qtybox" data-group="${containerId}" data-field="qty" data-item="${name}" placeholder="0"></span>
+    </div>`;
+  });
+  el.innerHTML = html;
+}
+
+renderDual("services", SERVICES);
+renderDual("packaging", PACKAGING);
+renderCatalogues("catalogues", CATALOGUES);
+renderSingle("brochures", BROCHURES);
+renderSingle("flyers", FLYERS);
+renderSingle("charts", CHARTS);
+renderSingle("posters", POSTERS);
+renderPromo("promo", PROMO);
+
+// Default: Fluidseal Bags Sealed marked as Required (matches "Default" in original)
+document.querySelector('#packaging input[data-item="Fluidseal Bags Sealed (Default)"][data-field="required"]').checked = true;
+
+/* ---------- Collect ---------- */
+function collectDual(containerId){
+  const out = [];
+  document.querySelectorAll(`#${containerId} .row`).forEach(row=>{
+    const item = row.dataset.item;
+    const req = row.querySelector('input[data-field="required"]').checked;
+    const using = row.querySelector('input[data-field="using"]').checked;
+    if(req||using) out.push({item, required:req, currently_using:using});
+  });
+  return out;
+}
+function collectSingle(containerId){
+  const out = [];
+  document.querySelectorAll(`#${containerId} .row input[type=checkbox]`).forEach(cb=>{
+    if(cb.checked) out.push(cb.dataset.item);
+  });
+  return out;
+}
+function collectCatalogues(){
+  const out = [];
+  document.querySelectorAll('#catalogues .row').forEach(row=>{
+    const item = row.dataset.item;
+    const e = row.querySelector('input[data-field="electronic"]').checked;
+    const p = row.querySelector('input[data-field="paper"]').checked;
+    if(e||p) out.push({item, electronic:e, paper:p});
+  });
+  return out;
+}
+function collectPromo(){
+  const out = [];
+  document.querySelectorAll('#promo .row').forEach(row=>{
+    const item = row.dataset.item;
+    const yes = row.querySelector('input[type=checkbox]').checked;
+    const qty = row.querySelector('input[data-field="qty"]').value;
+    if(yes || (qty && Number(qty)>0)) out.push({item, interested:yes, qty: qty? Number(qty):null});
+  });
+  return out;
+}
+
+function val(name){const el=document.querySelector(`[name="${name}"]`);return el?el.value.trim():"";}
+function payments(){return [...document.querySelectorAll('input[name="payment"]:checked')].map(c=>c.value);}
+
+function buildPayload(){
+  const services = collectDual("services");
+  const packaging = collectDual("packaging");
+  const catalogues = collectCatalogues();
+  const brochures = collectSingle("brochures");
+  const flyers = collectSingle("flyers");
+  const charts = collectSingle("charts");
+  const posters = collectSingle("posters");
+  const promo = collectPromo();
+
+  const comments = {
+    services: val("comments_services"),
+    packaging: val("comments_packaging"),
+    promotional: val("comments_promo"),
+    general: val("comments_general")
+  };
+
+  return {
+    survey_date: val("survey_date") || null,
+    filled_out_by: val("filled_out_by"),
+    account_name: val("account_name"),
+    account_city: val("account_city"),
+    industry_group: val("industry_group"),
+    industry: val("industry"),
+    sales_first_name: val("sales_first_name"),
+    sales_last_name: val("sales_last_name"),
+    sales_job_title: val("sales_job_title"),
+    sales_preferred_contact: val("sales_preferred_contact"),
+    sales_phone: val("sales_phone"),
+    sales_email: val("sales_email"),
+    admin_first_name: val("admin_first_name"),
+    admin_last_name: val("admin_last_name"),
+    admin_invoices_via: val("admin_invoices_via"),
+    admin_email: val("admin_email"),
+    admin_payment_options: payments(),
+    admin_preferred_contact: val("admin_preferred_contact"),
+    admin_phone: val("admin_phone"),
+    services, packaging,
+    subscriptions: {catalogues, brochures, flyers, charts, posters},
+    promotional_items: promo,
+    comments
+  };
+}
+
+/* ---------- Email summary ---------- */
+function buildEmail(p){
+  const L = [];
+  L.push("New Customer Interest Survey submission");
+  L.push("=======================================");
+  L.push(`Account: ${p.account_name||"-"}   City: ${p.account_city||"-"}`);
+  L.push(`Industry Group: ${p.industry_group||"-"}   Industry: ${p.industry||"-"}`);
+  L.push(`Filled out by: ${p.filled_out_by||"-"}   Date: ${p.survey_date||"-"}`);
+  L.push("");
+  L.push(`Sales contact: ${p.sales_first_name} ${p.sales_last_name} (${p.sales_job_title||"-"})`);
+  L.push(`  Phone: ${p.sales_phone||"-"}  Email: ${p.sales_email||"-"}  Prefers: ${p.sales_preferred_contact||"-"}`);
+  L.push(`Admin contact: ${p.admin_first_name} ${p.admin_last_name}`);
+  L.push(`  Phone: ${p.admin_phone||"-"}  Email: ${p.admin_email||"-"}  Invoices via: ${p.admin_invoices_via||"-"}`);
+  L.push(`  Payment: ${(p.admin_payment_options||[]).join(", ")||"-"}  Prefers: ${p.admin_preferred_contact||"-"}`);
+  L.push("");
+  if(p.services.length){L.push("SERVICES (R=Required, U=Using):");p.services.forEach(s=>L.push(`  - ${s.item} [${s.required?"R":""}${s.currently_using?"U":""}]`));L.push("");}
+  if(p.packaging.length){L.push("PACKAGING:");p.packaging.forEach(s=>L.push(`  - ${s.item} [${s.required?"R":""}${s.currently_using?"U":""}]`));L.push("");}
+  const sub=p.subscriptions;
+  if(sub.catalogues.length){L.push("CATALOGUES:");sub.catalogues.forEach(c=>L.push(`  - ${c.item} [${c.electronic?"Electronic ":""}${c.paper?"Paper":""}]`));L.push("");}
+  if(sub.brochures.length){L.push("BROCHURES: "+sub.brochures.join(", "));}
+  if(sub.flyers.length){L.push("FLYERS: "+sub.flyers.join(", "));}
+  if(sub.charts.length){L.push("CHARTS: "+sub.charts.join(", "));}
+  if(sub.posters.length){L.push("POSTERS: "+sub.posters.join(", "));}
+  if(p.promotional_items.length){L.push("");L.push("PROMO ITEMS:");p.promotional_items.forEach(i=>L.push(`  - ${i.item}${i.qty?" x"+i.qty:""}`));}
+  const c=p.comments;
+  if(c.services||c.packaging||c.promotional||c.general){
+    L.push("");L.push("COMMENTS:");
+    if(c.services)L.push("  Services: "+c.services);
+    if(c.packaging)L.push("  Packaging: "+c.packaging);
+    if(c.promotional)L.push("  Promo: "+c.promotional);
+    if(c.general)L.push("  General: "+c.general);
+  }
+  L.push("");
+  L.push("(A full copy of this submission has been saved to the Fluidseal database.)");
+  return L.join("\n");
+}
+
+/* ---------- Submit ---------- */
+const form = document.getElementById("survey");
+const statusEl = document.getElementById("status");
+const btn = document.getElementById("submitBtn");
+
+form.addEventListener("submit", async (e)=>{
+  e.preventDefault();
+  if(!form.reportValidity()) return;
+  btn.disabled = true;
+  statusEl.className = "status";
+  statusEl.textContent = "Saving your responses…";
+
+  const payload = buildPayload();
+  payload.raw = payload; // safety copy
+
+  try{
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}`,{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+        "apikey":SUPABASE_KEY,
+        "Authorization":`Bearer ${SUPABASE_KEY}`,
+        "Prefer":"return=minimal"
+      },
+      body: JSON.stringify(payload)
+    });
+    if(!res.ok){
+      const t = await res.text();
+      throw new Error(t || ("HTTP "+res.status));
+    }
+    statusEl.className = "status ok";
+    statusEl.textContent = "✓ Thank you! Your survey was saved. Opening your email so you can send us a copy…";
+
+    // Open pre-filled email to Fluidseal
+    const subject = `Customer Interest Survey — ${payload.account_name||"New Account"}`;
+    const body = buildEmail(payload);
+    const mailto = `mailto:${NOTIFY_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    setTimeout(()=>{ window.location.href = mailto; }, 600);
+
+    form.reset();
+    // restore default checkbox
+    const def = document.querySelector('#packaging input[data-item="Fluidseal Bags Sealed (Default)"][data-field="required"]');
+    if(def) def.checked = true;
+  }catch(err){
+    statusEl.className = "status err";
+    statusEl.textContent = "Sorry — something went wrong saving your survey. Please email us at " + NOTIFY_EMAIL + ". (" + err.message + ")";
+  }finally{
+    btn.disabled = false;
+  }
+});
+</script>
+</body>
+</html>
