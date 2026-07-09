@@ -23,7 +23,6 @@
     line-height:1.45;
   }
   .wrap{max-width:920px;margin:0 auto;background:#fff;box-shadow:0 1px 6px rgba(0,0,0,.08);}
-  /* Header */
   .topbar{background:var(--yellow);height:14px;}
   header{
     background:var(--black);color:#fff;padding:18px 26px;
@@ -39,7 +38,6 @@
   .intro h1{margin:0 0 4px;font-size:24px;text-transform:uppercase;letter-spacing:.5px;}
   .intro p{margin:2px 0;color:var(--grey);font-size:13px;}
   form{padding:8px 26px 40px;}
-  /* Section headers */
   .section{margin-top:26px;}
   .section > .bar{
     background:var(--yellow);color:var(--black);font-weight:800;
@@ -47,12 +45,14 @@
     padding:8px 12px;border-radius:3px;
   }
   .section .hint{font-size:12px;color:var(--grey);margin:6px 2px 10px;}
-  /* Field grid */
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px;margin-top:14px;}
   .grid.one{grid-template-columns:1fr;}
   .field{display:flex;flex-direction:column;gap:4px;}
   .field label{font-size:12.5px;font-weight:600;color:#333;}
   .field .req{color:#c0392b;}
+  .geo-btn{font-size:11px;font-weight:600;color:var(--black);background:var(--yellow);border:none;border-radius:12px;padding:2px 9px;cursor:pointer;margin-left:6px;}
+  .geo-btn:hover{background:#f0c800;}
+  .geo-status{font-size:11px;color:var(--grey);font-weight:500;margin-left:4px;}
   input[type=text],input[type=email],input[type=tel],input[type=date],input[type=number],textarea,select{
     border:1px solid #cfcfcf;border-radius:6px;padding:9px 10px;font-size:14px;font-family:inherit;background:#fff;
     width:100%;
@@ -64,7 +64,6 @@
   .pill input{position:absolute;opacity:0;pointer-events:none;}
   .pill span{display:inline-block;border:1px solid #cfcfcf;border-radius:20px;padding:6px 14px;font-size:13px;cursor:pointer;user-select:none;background:#fff;}
   .pill input:checked + span{background:var(--black);color:#fff;border-color:var(--black);}
-  /* Checklist tables */
   .checklist{margin-top:12px;border:1px solid var(--line);border-radius:8px;overflow:hidden;}
   .checklist .head,.checklist .row{
     display:grid;align-items:center;gap:8px;padding:8px 12px;
@@ -83,9 +82,7 @@
   .mini input{width:16px;height:16px;accent-color:var(--black);cursor:pointer;}
   .colhint{font-size:11px;color:#888;font-weight:500;text-transform:none;letter-spacing:0;}
   .qtybox{width:70px;padding:5px 8px;}
-  /* Subgroup label inside a checklist */
   .subgroup{grid-column:1/-1;background:#f0f0f0;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.4px;color:#444;padding:7px 12px;border-top:1px solid var(--line);}
-  /* Submit */
   .actions{margin-top:34px;display:flex;flex-direction:column;gap:10px;align-items:flex-start;}
   button.submit{
     background:var(--black);color:var(--yellow);border:none;border-radius:8px;
@@ -128,28 +125,29 @@
 
   <form id="survey">
 
-    <!-- HEADER -->
     <div class="section">
       <div class="bar">Account &amp; Submission</div>
       <div class="grid">
         <div class="field"><label>Date</label><input type="date" name="survey_date" /></div>
-        <div class="field"><label>Filled Out By <span class="req">*</span></label><input type="text" name="filled_out_by" required /></div>
-        <div class="field"><label>Account Name <span class="req">*</span></label><input type="text" name="account_name" required /></div>
-        <div class="field"><label>City</label><input type="text" name="account_city" /></div>
+        <div class="field"><label>Filled Out By <span class="req">*</span></label><input type="text" name="filled_out_by" autocomplete="name" required /></div>
+        <div class="field"><label>Account Name <span class="req">*</span></label><input type="text" name="account_name" autocomplete="organization" required /></div>
+        <div class="field">
+          <label>City <button type="button" id="geoBtn" class="geo-btn">📍 Use my location</button> <span id="geoStatus" class="geo-status"></span></label>
+          <input type="text" name="account_city" autocomplete="address-level2" />
+        </div>
         <div class="field"><label>Industry Group</label><input type="text" name="industry_group" /></div>
         <div class="field"><label>Industry</label><input type="text" name="industry" /></div>
       </div>
     </div>
 
-    <!-- SALES CONTACT -->
     <div class="section">
       <div class="bar">Sales Contact</div>
       <div class="grid">
-        <div class="field"><label>First Name</label><input type="text" name="sales_first_name" /></div>
-        <div class="field"><label>Last Name</label><input type="text" name="sales_last_name" /></div>
-        <div class="field"><label>Job Title</label><input type="text" name="sales_job_title" /></div>
-        <div class="field"><label>Email</label><input type="email" name="sales_email" /></div>
-        <div class="field"><label>Phone #</label><input type="tel" name="sales_phone" /></div>
+        <div class="field"><label>First Name</label><input type="text" name="sales_first_name" autocomplete="given-name" /></div>
+        <div class="field"><label>Last Name</label><input type="text" name="sales_last_name" autocomplete="family-name" /></div>
+        <div class="field"><label>Job Title</label><input type="text" name="sales_job_title" autocomplete="organization-title" /></div>
+        <div class="field"><label>Email</label><input type="email" name="sales_email" autocomplete="email" /></div>
+        <div class="field"><label>Phone #</label><input type="tel" name="sales_phone" autocomplete="tel" /></div>
         <div class="field">
           <label>Preferred Method of Contact</label>
           <div class="pill-group" data-name="sales_preferred_contact">
@@ -161,13 +159,12 @@
       </div>
     </div>
 
-    <!-- ADMIN CONTACT -->
     <div class="section">
       <div class="bar">Administration / Accounts Payable Contact</div>
       <div class="grid">
-        <div class="field"><label>First Name</label><input type="text" name="admin_first_name" /></div>
-        <div class="field"><label>Last Name</label><input type="text" name="admin_last_name" /></div>
-        <div class="field"><label>Email</label><input type="email" name="admin_email" /></div>
+        <div class="field"><label>First Name</label><input type="text" name="admin_first_name" autocomplete="given-name" /></div>
+        <div class="field"><label>Last Name</label><input type="text" name="admin_last_name" autocomplete="family-name" /></div>
+        <div class="field"><label>Email</label><input type="email" name="admin_email" autocomplete="email" /></div>
         <div class="field">
           <label>Invoices Sent Via</label>
           <select name="admin_invoices_via">
@@ -176,7 +173,7 @@
             <option>Mail</option>
           </select>
         </div>
-        <div class="field"><label>Phone #</label><input type="tel" name="admin_phone" /></div>
+        <div class="field"><label>Phone #</label><input type="tel" name="admin_phone" autocomplete="tel" /></div>
         <div class="field">
           <label>Preferred Method of Contact</label>
           <div class="pill-group" data-name="admin_preferred_contact">
@@ -199,7 +196,6 @@
       </div>
     </div>
 
-    <!-- SERVICES -->
     <div class="section">
       <div class="bar">Services of Interest</div>
       <div class="hint">For each service, mark whether you'd <strong>require</strong> it and whether you're <strong>currently using</strong> it (with any supplier).</div>
@@ -207,52 +203,44 @@
       <div class="field" style="margin-top:12px"><label>Comments — Services</label><textarea name="comments_services"></textarea></div>
     </div>
 
-    <!-- PACKAGING -->
     <div class="section">
       <div class="bar">Packaging of Interest</div>
       <div id="packaging" class="checklist dual"></div>
       <div class="field" style="margin-top:12px"><label>Comments — Packaging</label><textarea name="comments_packaging"></textarea></div>
     </div>
 
-    <!-- SUBSCRIPTIONS: CATALOGUES -->
     <div class="section">
       <div class="bar">Subscriptions — Catalogues</div>
       <div class="hint">Choose how you'd like to receive each catalogue.</div>
       <div id="catalogues" class="checklist catalogue"></div>
     </div>
 
-    <!-- SUBSCRIPTIONS: BROCHURES -->
     <div class="section">
       <div class="bar">Subscriptions — Brochures</div>
       <div id="brochures" class="checklist single"></div>
     </div>
 
-    <!-- SUBSCRIPTIONS: FLYERS -->
     <div class="section">
       <div class="bar">Subscriptions — Flyers</div>
       <div id="flyers" class="checklist single"></div>
     </div>
 
-    <!-- SUBSCRIPTIONS: CHARTS -->
     <div class="section">
       <div class="bar">Subscriptions — Charts</div>
       <div id="charts" class="checklist single"></div>
     </div>
 
-    <!-- SUBSCRIPTIONS: POSTERS -->
     <div class="section">
       <div class="bar">Subscriptions — Posters</div>
       <div id="posters" class="checklist single"></div>
     </div>
 
-    <!-- PROMOTIONAL -->
     <div class="section">
       <div class="bar">Promotional Items</div>
       <div id="promo" class="checklist promo"></div>
       <div class="field" style="margin-top:12px"><label>Comments — Promotional Items</label><textarea name="comments_promo"></textarea></div>
     </div>
 
-    <!-- GENERAL COMMENTS -->
     <div class="section">
       <div class="bar">Anything Else?</div>
       <div class="field" style="margin-top:12px"><label>General comments / special requests</label><textarea name="comments_general"></textarea></div>
@@ -343,7 +331,6 @@ function renderDual(containerId, items){
   const el = document.getElementById(containerId);
   let html = '<div class="head"><span>Item</span><span class="colhint">Required</span><span class="colhint">Currently Using</span></div>';
   items.forEach(name=>{
-    const id = slug(name);
     html += `<div class="row" data-item="${name}">
       <span class="item">${name}</span>
       <span class="cell">
@@ -406,8 +393,37 @@ renderSingle("charts", CHARTS);
 renderSingle("posters", POSTERS);
 renderPromo("promo", PROMO);
 
-// Default: Fluidseal Bags Sealed marked as Required (matches "Default" in original)
 document.querySelector('#packaging input[data-item="Fluidseal Bags Sealed (Default)"][data-field="required"]').checked = true;
+
+/* ---------- Smart form: prefill today's date + geolocation City ---------- */
+(function(){
+  const d = new Date();
+  const iso = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+  const dateInput = document.querySelector('[name="survey_date"]');
+  if(dateInput && !dateInput.value) dateInput.value = iso;
+
+  const geoBtn = document.getElementById("geoBtn");
+  const geoStatus = document.getElementById("geoStatus");
+  if(geoBtn){
+    geoBtn.addEventListener("click", ()=>{
+      if(!navigator.geolocation){ geoStatus.textContent = "location not supported"; return; }
+      geoStatus.textContent = "Detecting…";
+      navigator.geolocation.getCurrentPosition(async (pos)=>{
+        try{
+          const {latitude, longitude} = pos.coords;
+          const r = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`);
+          const j = await r.json();
+          const city = j.city || j.locality || j.principalSubdivision || "";
+          const cityInput = document.querySelector('[name="account_city"]');
+          if(city){ cityInput.value = city; geoStatus.textContent = "✓ " + city; }
+          else { geoStatus.textContent = "couldn't detect city"; }
+        }catch(e){ geoStatus.textContent = "lookup failed"; }
+      }, (err)=>{
+        geoStatus.textContent = (err && err.code === 1) ? "permission denied" : "location unavailable";
+      }, {enableHighAccuracy:false, timeout:10000, maximumAge:600000});
+    });
+  }
+})();
 
 /* ---------- Collect ---------- */
 function collectDual(containerId){
@@ -545,7 +561,7 @@ form.addEventListener("submit", async (e)=>{
   statusEl.textContent = "Saving your responses…";
 
   const payload = buildPayload();
-  payload.raw = payload; // safety copy
+  payload.raw = payload;
 
   try{
     const res = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}`,{
@@ -565,16 +581,16 @@ form.addEventListener("submit", async (e)=>{
     statusEl.className = "status ok";
     statusEl.textContent = "✓ Thank you! Your survey was saved. Opening your email so you can send us a copy…";
 
-    // Open pre-filled email to Fluidseal
     const subject = `Customer Interest Survey — ${payload.account_name||"New Account"}`;
     const body = buildEmail(payload);
     const mailto = `mailto:${NOTIFY_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     setTimeout(()=>{ window.location.href = mailto; }, 600);
 
     form.reset();
-    // restore default checkbox
     const def = document.querySelector('#packaging input[data-item="Fluidseal Bags Sealed (Default)"][data-field="required"]');
     if(def) def.checked = true;
+    const di = document.querySelector('[name="survey_date"]');
+    if(di){ const dd=new Date(); di.value = `${dd.getFullYear()}-${String(dd.getMonth()+1).padStart(2,"0")}-${String(dd.getDate()).padStart(2,"0")}`; }
   }catch(err){
     statusEl.className = "status err";
     statusEl.textContent = "Sorry — something went wrong saving your survey. Please email us at " + NOTIFY_EMAIL + ". (" + err.message + ")";
